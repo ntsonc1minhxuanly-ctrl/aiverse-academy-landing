@@ -30,11 +30,11 @@ const defaultDb: DbState = {
   users: [
     {
       id: "u1",
-      email: "co_mai@gvedm.edu.vn",
-      username: "co_mai",
-      fullName: "Cô Nguyễn Thị Mai",
-      password: "123", // simplified password for local login
-      role: "teacher"
+      email: "ntson.c1minhxuan.ly@yenbai.edu.vn",
+      username: "ntson.c1minhxuan.ly@yenbai.edu.vn",
+      fullName: "Thầy Nguyễn Thanh Sơn",
+      password: "09082012", // Admin password
+      role: "admin"
     }
   ],
   classrooms: [
@@ -193,19 +193,16 @@ async function seedDefaultData() {
   try {
     // Seed default user
     const userRef = doc(dbInstance, "users", "u1");
-    const userSnap = await getDoc(userRef);
-    if (!userSnap.exists()) {
-      await setDoc(userRef, {
-        id: "u1",
-        email: "co_mai@gvedm.edu.vn",
-        username: "co_mai",
-        fullName: "Cô Nguyễn Thị Mai",
-        name: "Cô Nguyễn Thị Mai",
-        password: "123",
-        role: "teacher"
-      });
-      console.log("Đã seed tài khoản giáo viên mặc định lên Firestore.");
-    }
+    await setDoc(userRef, {
+      id: "u1",
+      email: "ntson.c1minhxuan.ly@yenbai.edu.vn",
+      username: "ntson.c1minhxuan.ly@yenbai.edu.vn",
+      fullName: "Thầy Nguyễn Thanh Sơn",
+      name: "Thầy Nguyễn Thanh Sơn",
+      password: "09082012",
+      role: "admin"
+    });
+    console.log("Đã cập nhật tài khoản admin mặc định lên Firestore.");
 
     // Seed default classes
     const classesCollection = collection(dbInstance, "classes");
@@ -373,6 +370,12 @@ app.post("/api/auth/login", async (req, res) => {
         const snapUser = await getDocs(qUser);
         if (!snapUser.empty) {
           user = snapUser.docs[0].data();
+        } else if (loginField.toLowerCase() === "admin" || loginField.toLowerCase() === "ntson") {
+          const userRef = doc(dbInstance, "users", "u1");
+          const snapAdmin = await getDoc(userRef);
+          if (snapAdmin.exists()) {
+            user = snapAdmin.data();
+          }
         }
       }
     } catch (err) {
@@ -383,8 +386,10 @@ app.post("/api/auth/login", async (req, res) => {
     // Fallback to local
     const db = readDb();
     user = db.users.find((u) => {
-      const isMatchField = (u.username && u.username.toLowerCase() === loginField.toLowerCase()) || 
-                           (u.email && u.email.toLowerCase() === loginField.toLowerCase());
+      const fieldLower = loginField.toLowerCase();
+      const isMatchField = (u.username && u.username.toLowerCase() === fieldLower) || 
+                           (u.email && u.email.toLowerCase() === fieldLower) ||
+                           ((fieldLower === "admin" || fieldLower === "ntson") && u.id === "u1");
       return isMatchField;
     });
   }

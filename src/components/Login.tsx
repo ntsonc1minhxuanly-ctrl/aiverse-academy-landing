@@ -42,7 +42,7 @@ export default function Login({ onLoginSuccess, onNavigateToRegister }: LoginPro
     setLoading(true);
     setError("");
     try {
-      const user = await login("co_mai", "123");
+      const user = await login("ntson.c1minhxuan.ly@yenbai.edu.vn", "09082012");
       onLoginSuccess(user);
     } catch (err: any) {
       setError("Lỗi kết nối máy chủ. Vui lòng thử lại!");
@@ -102,7 +102,7 @@ export default function Login({ onLoginSuccess, onNavigateToRegister }: LoginPro
                   id="username"
                   name="username"
                   type="text"
-                  placeholder="co_mai@gvedm.edu.vn hoặc co_mai"
+                  placeholder="ntson.c1minhxuan.ly@yenbai.edu.vn hoặc admin"
                   value={username}
                   onChange={(e) => setUsername(e.target.value)}
                   className="pl-10"
