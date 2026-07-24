@@ -1,0 +1,8 @@
+{
+  "name": "Giáo Viên Đổi Mới",
+  "description": "Nền tảng hỗ trợ giáo viên đổi mới phương pháp giảng dạy, soạn giáo án bằng AI, quản lý lớp học và thiết kế trò chơi học tập tương tác.",
+  "requestFramePermissions": [
+    "microphone"
+  ],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
